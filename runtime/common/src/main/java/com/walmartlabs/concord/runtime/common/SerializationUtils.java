@@ -20,6 +20,7 @@ package com.walmartlabs.concord.runtime.common;
  * =====
  */
 
+import io.github.pixee.security.ObjectInputFilters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,7 @@ public final class SerializationUtils {
     @SuppressWarnings("unchecked")
     public static <T> T deserialize(InputStream in, Class<T> expectedType) throws IOException {
         try (ObjectInputStream ois = new ObjectInputStream(in)) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
             return (T) ois.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException("Can't deserialize a value into " + expectedType + ": " + e.getMessage(), e);

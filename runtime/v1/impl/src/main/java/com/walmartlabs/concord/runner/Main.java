@@ -54,6 +54,7 @@ import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.sdk.MapUtils;
 import com.walmartlabs.concord.sdk.Task;
 import com.walmartlabs.concord.sdk.UserDefinedException;
+import io.github.pixee.security.ObjectInputFilters;
 import io.takari.bpm.api.*;
 import org.eclipse.sisu.space.BeanScanning;
 import org.eclipse.sisu.space.SpaceModule;
@@ -351,6 +352,7 @@ public class Main {
 
         Variables vars;
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(varsFile))) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             vars = (Variables) in.readObject();
         } catch (ClassNotFoundException | IOException e) {
             log.error("Can't restore the saved variables: {}", e.getMessage());
@@ -369,6 +371,7 @@ public class Main {
         }
 
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(lastErrorFile))) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             Throwable t = (Throwable) in.readObject();
             vars = vars.setVariable(Constants.Context.LAST_ERROR_KEY, t);
         } catch (ClassNotFoundException | IOException e) {
