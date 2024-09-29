@@ -54,6 +54,7 @@ import com.walmartlabs.concord.runtime.v2.sdk.*;
 import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.svm.*;
 import com.walmartlabs.concord.svm.Runtime;
+import io.github.pixee.security.BoundedLineReader;
 import org.immutables.value.Value;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -333,7 +334,7 @@ public abstract class AbstractTest {
              BufferedReader reader = new BufferedReader(new InputStreamReader(bais))) {
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 if (line.matches(pattern)) {
                     cnt++;
                 }
@@ -353,7 +354,7 @@ public abstract class AbstractTest {
 
             StringBuilder content = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 content.append(line).append("\n");
             }
 

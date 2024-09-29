@@ -26,6 +26,7 @@ import com.walmartlabs.concord.common.secret.BinaryDataSecret;
 import com.walmartlabs.concord.common.secret.KeyPair;
 import com.walmartlabs.concord.common.secret.UsernamePassword;
 import com.walmartlabs.concord.sdk.Secret;
+import io.github.pixee.security.BoundedLineReader;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,7 +253,7 @@ public class GitClient {
 
         try (BufferedReader reader = new BufferedReader(new StringReader(result))) {
             while (true) {
-                String line = reader.readLine();
+                String line = BoundedLineReader.readLine(reader, 5_000_000);
                 if (line == null) {
                     break;
                 }
@@ -452,7 +453,7 @@ public class GitClient {
                 StringBuilder sb = new StringBuilder();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
                     String line;
-                    while ((line = reader.readLine()) != null) {
+                    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                         log.info("GIT (stdout): {}", hideSensitiveData(line));
                         sb.append(line).append("\n");
                     }
@@ -464,7 +465,7 @@ public class GitClient {
                 StringBuilder sb = new StringBuilder();
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
                     String line;
-                    while ((line = reader.readLine()) != null) {
+                    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                         log.info("GIT (stderr): {}", hideSensitiveData(line));
                         sb.append(line).append("\n");
                     }
@@ -632,11 +633,11 @@ public class GitClient {
         BufferedReader reader = new BufferedReader(new StringReader(result));
         String line;
         try {
-            line = reader.readLine();
+            line = BoundedLineReader.readLine(reader, 5_000_000);
             if (line == null) {
                 return null;
             }
-            if (reader.readLine() != null) { // NOSONAR
+            if (BoundedLineReader.readLine(reader, 5_000_000) != null) { // NOSONAR
                 throw new RepositoryException("Unexpected multiple lines: " + result);
             }
         } catch (IOException e) {

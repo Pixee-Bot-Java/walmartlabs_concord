@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.http.HttpHeaders;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
@@ -114,7 +115,7 @@ public class SsoClient {
                     new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = BoundedLineReader.readLine(in, 5_000_000)) != null) {
                 content.append(inputLine);
             }
             in.close();

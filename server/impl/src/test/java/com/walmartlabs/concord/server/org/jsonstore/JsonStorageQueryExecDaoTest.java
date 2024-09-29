@@ -23,6 +23,7 @@ package com.walmartlabs.concord.server.org.jsonstore;
 import com.walmartlabs.concord.server.AbstractDaoTest;
 import com.walmartlabs.concord.server.ConcordObjectMapper;
 import com.walmartlabs.concord.server.TestObjectMapper;
+import io.github.pixee.security.BoundedLineReader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -79,7 +80,7 @@ public class JsonStorageQueryExecDaoTest extends AbstractDaoTest {
             StringBuilder sb = new StringBuilder();
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 if (line.trim().isEmpty()) {
                     brk++;
                     continue;

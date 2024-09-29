@@ -47,6 +47,7 @@ import com.walmartlabs.concord.policyengine.PolicyEngine;
 import com.walmartlabs.concord.runtime.common.cfg.RunnerConfiguration;
 import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.sdk.MapUtils;
+import io.github.pixee.security.BoundedLineReader;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +128,7 @@ public class RunnerJobExecutor implements JobExecutor {
 
             String version;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-                version = reader.readLine();
+                version = BoundedLineReader.readLine(reader, 5_000_000);
             }
 
             int start = version.indexOf("\"");

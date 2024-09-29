@@ -27,6 +27,7 @@ import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.sdk.Context;
 import com.walmartlabs.concord.sdk.DockerContainerSpec;
 import com.walmartlabs.concord.sdk.DockerService;
+import io.github.pixee.security.BoundedLineReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,7 +141,7 @@ public class DockerServiceImpl implements DockerService {
     private static void streamToLog(InputStream in, LogCallback callback) throws IOException {
         BufferedReader reader = new TruncBufferedReader(new InputStreamReader(in));
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
             callback.onLog(line);
         }
     }

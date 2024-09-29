@@ -23,6 +23,7 @@ package com.walmartlabs.concord.it.server;
 import com.walmartlabs.concord.client2.*;
 import com.walmartlabs.concord.common.IOUtils;
 import com.walmartlabs.concord.sdk.Constants;
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.junit.jupiter.api.Test;
 
@@ -95,7 +96,7 @@ public class ProjectFileIT extends AbstractServerIT {
             List<String> l = new ArrayList<>();
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 l.add(line.replaceAll("WILL_BE_REPLACED", dep));
             }
 

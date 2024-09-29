@@ -20,6 +20,7 @@ package com.walmartlabs.concord.common;
  * =====
  */
 
+import io.github.pixee.security.BoundedLineReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -120,7 +121,7 @@ public class TruncBufferedReaderTest {
         List<String> result = new ArrayList<>();
         BufferedReader reader = new TruncBufferedReader(new InputStreamReader(new ByteArrayInputStream(str.getBytes())), maxLineLength);
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
             result.add(line);
         }
         return result;

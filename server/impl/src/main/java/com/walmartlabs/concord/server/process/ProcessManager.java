@@ -47,6 +47,7 @@ import com.walmartlabs.concord.server.security.Roles;
 import com.walmartlabs.concord.server.security.UnauthorizedException;
 import com.walmartlabs.concord.server.security.UserPrincipal;
 import com.walmartlabs.concord.server.security.sessionkey.SessionKeyPrincipal;
+import io.github.pixee.security.BoundedLineReader;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -481,7 +482,7 @@ public class ProcessManager {
         Set<String> result = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 result.add(line);
             }
             return Optional.of(result);
