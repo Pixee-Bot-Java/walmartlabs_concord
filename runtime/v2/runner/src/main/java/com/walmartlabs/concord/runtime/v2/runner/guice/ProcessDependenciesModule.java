@@ -23,6 +23,8 @@ package com.walmartlabs.concord.runtime.v2.runner.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.walmartlabs.concord.sdk.Constants;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.eclipse.sisu.space.BeanScanning;
 import org.eclipse.sisu.space.SpaceModule;
 import org.eclipse.sisu.space.URLClassSpace;
@@ -88,7 +90,7 @@ public class ProcessDependenciesModule extends AbstractModule {
                 .map(s -> {
                     try {
                         // assume all dependencies are resolved into file paths at this point
-                        return new URL("file://" + s);
+                        return Urls.create("file://" + s, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     } catch (MalformedURLException e) {
                         throw new RuntimeException("Invalid dependency " + s + ": " + e.getMessage());
                     }

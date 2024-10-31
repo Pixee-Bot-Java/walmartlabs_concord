@@ -23,6 +23,8 @@ package com.walmartlabs.concord.agent.executors.runner;
 import com.walmartlabs.concord.agent.ExecutionException;
 import com.walmartlabs.concord.policyengine.PolicyEngine;
 import com.walmartlabs.concord.sdk.Constants;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +130,7 @@ public final class JobDependencies {
                                 code == 307) {
 
                             String location = httpConn.getHeaderField("Location");
-                            url = new URL(location);
+                            url = Urls.create(location, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                             log.info("normalizeUrls -> using: {}", location);
 
                             continue;
