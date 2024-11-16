@@ -20,6 +20,7 @@ package com.walmartlabs.concord.server;
  * =====
  */
 
+import static io.github.pixee.security.jakarta.PathValidator.validateDispatcherPath;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +51,7 @@ public class LogServlet extends HttpServlet {
         }
 
         String instanceId = uri.substring(i + 1, len - 4);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/api/v1/process/" + instanceId + "/log");
+        RequestDispatcher dispatcher = req.getRequestDispatcher(validateDispatcherPath("/api/v1/process/" + instanceId + "/log"));
         dispatcher.forward(req, resp);
     }
 }
