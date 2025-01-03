@@ -27,6 +27,7 @@ import com.walmartlabs.concord.server.security.Roles;
 import com.walmartlabs.concord.server.security.UnauthorizedException;
 import com.walmartlabs.concord.server.security.UserPrincipal;
 import com.walmartlabs.concord.server.security.ldap.LdapPrincipal;
+import io.github.pixee.security.ObjectInputFilters;
 import io.takari.bpm.form.Form;
 
 import javax.inject.Inject;
@@ -118,6 +119,7 @@ public class FormAccessManager {
 
     private static Optional<Form> deserialize(InputStream data) {
         try (ObjectInputStream in = new ObjectInputStream(data)) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             return Optional.ofNullable((Form) in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error while deserializing a form", e);
