@@ -21,6 +21,7 @@ package com.walmartlabs.concord.server.boot.filters;
  */
 
 import com.walmartlabs.concord.server.cfg.ServerConfiguration;
+import io.github.pixee.security.Newlines;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class CORSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse httpResp = (HttpServletResponse) response;
-        httpResp.setHeader("Access-Control-Allow-Origin", cfg.getCORSConfiguration().getAllowOrigin());
+        httpResp.setHeader("Access-Control-Allow-Origin", Newlines.stripAll(cfg.getCORSConfiguration().getAllowOrigin()));
         httpResp.setHeader("Access-Control-Allow-Methods", "*");
         httpResp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Range, Cookie, Origin");
         httpResp.setHeader("Access-Control-Expose-Headers", "cache-control," +
