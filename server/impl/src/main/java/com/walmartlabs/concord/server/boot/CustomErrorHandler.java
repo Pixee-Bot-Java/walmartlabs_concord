@@ -20,6 +20,7 @@ package com.walmartlabs.concord.server.boot;
  * =====
  */
 
+import io.github.pixee.security.Newlines;
 import org.eclipse.jetty.ee8.nested.ErrorHandler;
 import org.eclipse.jetty.ee8.nested.Request;
 import org.eclipse.jetty.http.HttpHeader;
@@ -45,7 +46,7 @@ public class CustomErrorHandler extends ErrorHandler {
                 // automatically set the correct Cache-Control headers
                 String cacheControl = getCacheControl();
                 if (cacheControl != null) {
-                    response.setHeader(HttpHeader.CACHE_CONTROL.asString(), cacheControl);
+                    response.setHeader(HttpHeader.CACHE_CONTROL.asString(), Newlines.stripAll(cacheControl));
                 }
                 return;
             }
