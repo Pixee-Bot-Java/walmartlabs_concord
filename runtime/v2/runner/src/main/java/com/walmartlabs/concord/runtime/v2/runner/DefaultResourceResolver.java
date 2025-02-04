@@ -21,6 +21,8 @@ package com.walmartlabs.concord.runtime.v2.runner;
  */
 
 import com.walmartlabs.concord.runtime.v2.sdk.WorkingDirectory;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
@@ -48,7 +50,7 @@ public class DefaultResourceResolver implements ResourceResolver {
     @Override
     public InputStream resolve(String name) throws IOException {
         try {
-            URL url = new URL(name);
+            URL url = Urls.create(name, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             return toStream(url);
         } catch (MalformedURLException e) {
             // not a URL, let's try a file first...

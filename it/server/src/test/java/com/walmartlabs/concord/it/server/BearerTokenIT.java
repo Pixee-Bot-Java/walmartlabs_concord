@@ -21,6 +21,8 @@ package com.walmartlabs.concord.it.server;
  */
 
 import com.walmartlabs.concord.it.common.ServerClient;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.jupiter.api.Test;
 
 import java.net.HttpURLConnection;
@@ -32,7 +34,7 @@ public class BearerTokenIT {
 
     @Test
     public void test() throws Exception {
-        URL urlObj = new URL(ITConstants.SERVER_URL + "/api/v1/org?limit=1");
+        URL urlObj = Urls.create(ITConstants.SERVER_URL + "/api/v1/org?limit=1", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
 
         httpCon.setRequestProperty("Authorization", "Bearer " + ServerClient.DEFAULT_API_KEY);

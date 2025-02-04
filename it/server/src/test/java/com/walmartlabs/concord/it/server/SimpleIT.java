@@ -20,6 +20,8 @@ package com.walmartlabs.concord.it.server;
  * =====
  */
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
@@ -29,7 +31,7 @@ public class SimpleIT {
 
     @Test
     public void test() throws Exception {
-        URL url = new URL(ITConstants.SERVER_URL + "/api/v1/server/ping");
+        URL url = Urls.create(ITConstants.SERVER_URL + "/api/v1/server/ping", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         URLConnection conn = url.openConnection();
         System.out.println(conn.getContent());
     }

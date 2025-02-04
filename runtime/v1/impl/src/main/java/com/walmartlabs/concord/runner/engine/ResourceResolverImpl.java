@@ -20,6 +20,8 @@ package com.walmartlabs.concord.runner.engine;
  * =====
  */
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.takari.bpm.resource.ClassPathResourceResolver;
 import io.takari.bpm.resource.ResourceResolver;
 
@@ -48,7 +50,7 @@ public class ResourceResolverImpl implements ResourceResolver {
     @Override
     public InputStream getResourceAsStream(String name) throws IOException {
         try {
-            URL url = new URL(name);
+            URL url = Urls.create(name, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             return toStream(url);
         } catch (MalformedURLException e) {
             // not a URL, let's try a file first...
