@@ -54,6 +54,8 @@ import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.sdk.MapUtils;
 import com.walmartlabs.concord.sdk.Task;
 import com.walmartlabs.concord.sdk.UserDefinedException;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.takari.bpm.api.*;
 import org.eclipse.sisu.space.BeanScanning;
 import org.eclipse.sisu.space.SpaceModule;
@@ -603,7 +605,7 @@ public class Main {
                     }
 
                     try {
-                        return new URL("file://" + s);
+                        return Urls.create("file://" + s, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                     } catch (MalformedURLException e) {
                         throw new RuntimeException("Invalid dependency path " + s + ":" + e.getMessage());
                     }

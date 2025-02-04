@@ -29,6 +29,8 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.walmartlabs.concord.client2.*;
 import com.walmartlabs.concord.common.IOUtils;
 import com.walmartlabs.concord.sdk.Constants;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -135,7 +137,7 @@ public class TemplateIT extends AbstractTest {
             throw new RuntimeException("Failed to stub for template file download" + e.getMessage());
         }
 
-        return new URL("http", concord.hostAddressAccessibleByContainers(), rule.getPort(), tPath.toString()).toString();
+        return Urls.create("http", concord.hostAddressAccessibleByContainers(), rule.getPort(), tPath.toString(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).toString();
     }
 
     /**

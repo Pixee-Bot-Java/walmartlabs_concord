@@ -29,6 +29,8 @@ import com.walmartlabs.concord.client2.FormSubmitResponse;
 import com.walmartlabs.concord.client2.ProcessApi;
 import com.walmartlabs.concord.client2.ProcessEntry;
 import com.walmartlabs.concord.sdk.MapUtils;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
@@ -257,7 +259,7 @@ public class FormIT extends AbstractTest {
     }
 
     private static void startCustomFormSession(ConcordRule concord, UUID instanceId, String formName) throws Exception {
-        URL url = new URL(concord.apiBaseUrl() + "/api/service/custom_form/" + instanceId + "/" + formName + "/start");
+        URL url = Urls.create(concord.apiBaseUrl() + "/api/service/custom_form/" + instanceId + "/" + formName + "/start", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestProperty("Authorization", concord.environment().apiToken());
         http.setRequestMethod("POST");
@@ -271,7 +273,7 @@ public class FormIT extends AbstractTest {
 
     @SuppressWarnings({"unchecked", "UnstableApiUsage"})
     private static Map<String, Object> getDataJs(ConcordRule concord, UUID instanceId, String formName) throws Exception {
-        URL url = new URL(concord.apiBaseUrl() + "/forms/" + instanceId + "/" + formName + "/form/data.js");
+        URL url = Urls.create(concord.apiBaseUrl() + "/forms/" + instanceId + "/" + formName + "/form/data.js", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestProperty("Authorization", concord.environment().apiToken());
         http.connect();

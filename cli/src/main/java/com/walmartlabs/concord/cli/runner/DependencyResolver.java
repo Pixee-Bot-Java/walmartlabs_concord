@@ -23,6 +23,8 @@ package com.walmartlabs.concord.cli.runner;
 import com.walmartlabs.concord.dependencymanager.DependencyEntity;
 import com.walmartlabs.concord.dependencymanager.DependencyManager;
 import com.walmartlabs.concord.dependencymanager.ProgressListener;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import java.io.IOException;
 import java.net.*;
@@ -151,7 +153,7 @@ public class DependencyResolver {
                                 code == 307) {
 
                             String location = httpConn.getHeaderField("Location");
-                            url = new URL(location);
+                            url = Urls.create(location, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
                             System.out.println("normalizeUrls -> using: " + location);
 
                             continue;
