@@ -21,6 +21,7 @@ package com.walmartlabs.concord.agent.docker;
  */
 
 import com.walmartlabs.concord.common.DockerProcessBuilder;
+import io.github.pixee.security.BoundedLineReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +139,7 @@ public class OrphanSweeper implements Runnable {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(b.getInputStream()))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }

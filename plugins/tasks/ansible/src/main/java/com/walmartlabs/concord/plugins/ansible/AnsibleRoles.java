@@ -22,6 +22,7 @@ package com.walmartlabs.concord.plugins.ansible;
 
 import com.walmartlabs.concord.common.PrivilegedAction;
 import com.walmartlabs.concord.common.TruncBufferedReader;
+import io.github.pixee.security.BoundedLineReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +120,7 @@ public class AnsibleRoles {
 
         try (BufferedReader reader = new TruncBufferedReader(new InputStreamReader(p.getInputStream()))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 log.info("GIT: {}", hideSensitiveData(line));
             }
         }
