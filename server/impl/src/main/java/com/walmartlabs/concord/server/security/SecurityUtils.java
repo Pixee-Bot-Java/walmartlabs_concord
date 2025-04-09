@@ -23,6 +23,7 @@ package com.walmartlabs.concord.server.security;
 import com.walmartlabs.concord.server.sdk.security.AuthenticationException;
 import com.walmartlabs.concord.server.user.RoleEntry;
 import com.walmartlabs.concord.server.user.UserEntry;
+import io.github.pixee.security.ObjectInputFilters;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.SecurityManager;
@@ -112,6 +113,7 @@ public final class SecurityUtils {
 
     public static Optional<PrincipalCollection> deserialize(InputStream in) {
         try (ObjectInputStream ois = new ObjectInputStream(in)) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
             return Optional.of((PrincipalCollection) ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);

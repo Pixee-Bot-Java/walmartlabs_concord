@@ -24,6 +24,7 @@ import com.walmartlabs.concord.forms.Form;
 import com.walmartlabs.concord.sdk.Constants;
 import com.walmartlabs.concord.server.process.state.ProcessStateManager;
 import com.walmartlabs.concord.server.sdk.ProcessKey;
+import io.github.pixee.security.ObjectInputFilters;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -108,6 +109,7 @@ public class FormManager {
 
     private static Optional<Form> deserialize(InputStream data) {
         try (ObjectInputStream in = new ObjectInputStream(data)) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             return Optional.ofNullable((Form) in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error while deserializing a form", e);
