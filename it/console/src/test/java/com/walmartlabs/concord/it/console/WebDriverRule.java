@@ -20,6 +20,8 @@ package com.walmartlabs.concord.it.console;
  * =====
  */
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -83,7 +85,7 @@ public class WebDriverRule implements BeforeEachCallback, TestExecutionException
         opts.addArguments("--dns-prefetch-disable");
 
         if (isRemote()) {
-            URL url = new URL("http://localhost:" + seleniumPort + "/wd/hub");
+            URL url = Urls.create("http://localhost:" + seleniumPort + "/wd/hub", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             log.info("Using a remote driver: {}", url);
             RemoteWebDriver d = new RemoteWebDriver(url, opts);
             d.setFileDetector(new LocalFileDetector());

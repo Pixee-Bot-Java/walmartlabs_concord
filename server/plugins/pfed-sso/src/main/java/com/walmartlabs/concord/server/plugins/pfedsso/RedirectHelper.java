@@ -20,6 +20,8 @@ package com.walmartlabs.concord.server.plugins.pfedsso;
  * =====
  */
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.eclipse.jetty.util.URIUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +78,7 @@ public class RedirectHelper {
 
         URL url;
         try {
-            url = new URL(s);
+            url = Urls.create(s, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

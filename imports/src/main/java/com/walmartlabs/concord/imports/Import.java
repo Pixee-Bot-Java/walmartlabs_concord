@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.walmartlabs.concord.common.ToStringHelper;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.immutables.value.Value;
 import org.immutables.serial.Serial;
 
@@ -207,7 +209,7 @@ public interface Import extends Serializable {
 
     static String hideSensitiveData(String url) {
         try {
-            URL u = new URL(url);
+            URL u = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             if (u.getUserInfo() == null) {
                 return url;
             }

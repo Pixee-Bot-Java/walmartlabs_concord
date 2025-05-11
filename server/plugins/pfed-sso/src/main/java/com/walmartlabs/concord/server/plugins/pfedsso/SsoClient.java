@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.http.HttpHeaders;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
@@ -76,7 +78,7 @@ public class SsoClient {
     public void revokeToken(String refreshToken) throws IOException {
         HttpURLConnection con = null;
         try {
-            URL url = new URL(cfg.getLogoutEndpointUrl());
+            URL url = Urls.create(cfg.getLogoutEndpointUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             con = (HttpURLConnection) url.openConnection();
             String urlParameters = String.format(REVOKE_TOKEN_REQUEST, refreshToken, cfg.getClientId());
             postRequest(con, urlParameters);
@@ -99,7 +101,7 @@ public class SsoClient {
         }
         HttpURLConnection con = null;
         try {
-            URL url = new URL(cfg.getTokenSigningKeyUrl());
+            URL url = Urls.create(cfg.getTokenSigningKeyUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setConnectTimeout((int) cfg.getTokenServiceConnectTimeout().toMillis());
@@ -134,7 +136,7 @@ public class SsoClient {
     private Token getToken(String urlParameters) throws IOException {
         HttpURLConnection con = null;
         try {
-            URL url = new URL(cfg.getTokenEndPointUrl());
+            URL url = Urls.create(cfg.getTokenEndPointUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             con = (HttpURLConnection) url.openConnection();
             postRequest(con, urlParameters);
             int responseCode = con.getResponseCode();
@@ -184,7 +186,7 @@ public class SsoClient {
         }
         HttpURLConnection con = null;
         try {
-            URL url = new URL(cfg.getUserInfoEndpointUrl());
+            URL url = Urls.create(cfg.getUserInfoEndpointUrl(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             con = (HttpURLConnection) url.openConnection();
             String authzHeaderValue = String.format("Bearer %s", accessToken);
             con.setRequestProperty(HttpHeaders.AUTHORIZATION, authzHeaderValue);

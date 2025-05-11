@@ -218,6 +218,10 @@
             <version>2.7.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.pixee</groupId>
+            <artifactId>java-security-toolkit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
