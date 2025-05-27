@@ -20,6 +20,7 @@ package com.walmartlabs.concord.common;
  * =====
  */
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -293,7 +294,7 @@ public final class IOUtils {
         List<String> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 if (line.matches(pattern)) {
                     result.add(line);
                 }
