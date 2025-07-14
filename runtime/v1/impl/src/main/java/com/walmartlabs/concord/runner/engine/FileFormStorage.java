@@ -22,6 +22,7 @@ package com.walmartlabs.concord.runner.engine;
 
 import com.walmartlabs.concord.common.IOUtils;
 import com.walmartlabs.concord.runner.SerializationUtils;
+import io.github.pixee.security.ObjectInputFilters;
 import io.takari.bpm.api.ExecutionException;
 import io.takari.bpm.form.Form;
 import io.takari.bpm.form.FormStorage;
@@ -71,6 +72,7 @@ public class FileFormStorage implements FormStorage {
         }
 
         try (ObjectInputStream out = new ObjectInputStream(Files.newInputStream(p))) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(out);
             return (Form) out.readObject();
         } catch (ClassNotFoundException | IOException e) {
             throw new ExecutionException("Error while reading a form", e);

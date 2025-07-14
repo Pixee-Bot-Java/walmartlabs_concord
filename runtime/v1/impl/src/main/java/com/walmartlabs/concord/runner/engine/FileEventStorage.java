@@ -22,6 +22,7 @@ package com.walmartlabs.concord.runner.engine;
 
 import com.walmartlabs.concord.common.IOUtils;
 import com.walmartlabs.concord.runner.SerializationUtils;
+import io.github.pixee.security.ObjectInputFilters;
 import io.takari.bpm.event.Event;
 import io.takari.bpm.event.EventStorage;
 import io.takari.bpm.event.ExpiredEvent;
@@ -80,6 +81,7 @@ public class FileEventStorage implements EventStorage {
 
     private Event get(Path p) {
         try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(p))) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             return (Event) in.readObject();
         } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);

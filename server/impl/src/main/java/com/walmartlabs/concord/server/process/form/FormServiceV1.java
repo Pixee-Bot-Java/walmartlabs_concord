@@ -35,6 +35,7 @@ import com.walmartlabs.concord.server.sdk.PartialProcessKey;
 import com.walmartlabs.concord.server.sdk.ProcessKey;
 import com.walmartlabs.concord.server.user.UserInfoProvider.UserInfo;
 import com.walmartlabs.concord.server.user.UserManager;
+import io.github.pixee.security.ObjectInputFilters;
 import io.takari.bpm.api.ExecutionException;
 import io.takari.bpm.form.DefaultFormService;
 import io.takari.bpm.form.DefaultFormService.ResumeHandler;
@@ -91,6 +92,7 @@ public class FormServiceV1 {
 
     private static Optional<Form> deserialize(InputStream data) {
         try (ObjectInputStream in = new ObjectInputStream(data)) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(in);
             return Optional.ofNullable((Form) in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error while deserializing a form", e);
